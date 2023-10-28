@@ -1,0 +1,68 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
+
+x-dialog {
+  position: relative;
+}
+
+x-dialog [data-part=backdrop] {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 20;
+}
+
+x-dialog [data-part=content] {
+  position: fixed;
+  background-color: white;
+  padding: 8px;
+  z-index: 50;
+}
+
+x-dialog[data-state=open] [data-part=backdrop], x-dialog[data-state=open] [data-part=content] {
+  animation: fade-in 200ms ease-out;
+}
+
+x-dialog[data-state=closed] [data-part=backdrop], x-dialog[data-state=closed] [data-part=content] {
+  animation: fade-out 200ms ease-in;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 100;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 100;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
