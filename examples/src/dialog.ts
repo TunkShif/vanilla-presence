@@ -5,8 +5,8 @@ export class DialogElement extends HTMLElement {
   private backdrop: HTMLElement
   private content: HTMLElement
 
-  private backdropPresence: Presence
-  private contentPresence: Presence
+  private backdropPresence!: Presence
+  private contentPresence!: Presence
 
   constructor() {
     super()
@@ -14,21 +14,18 @@ export class DialogElement extends HTMLElement {
     this.trigger = this.querySelector<HTMLElement>("[data-part='trigger']")!
     this.backdrop = this.querySelector<HTMLElement>("[data-part='backdrop']")!
     this.content = this.querySelector<HTMLElement>("[data-part='content']")!
+  }
+
+  connectedCallback() {
+    this.trigger.addEventListener("click", this.handleClick.bind(this))
 
     this.backdropPresence = createPresence(this.isOpen, this.backdrop)
     this.contentPresence = createPresence(this.isOpen, this.content)
   }
 
-  connectedCallback() {
-    this.trigger.addEventListener("click", this.handleClick.bind(this))
-    if (this.isOpen) {
-      this.open()
-    }
-  }
-
   disconnectedCallback() {
-    this.backdropPresence.destroy()
-    this.contentPresence.destroy()
+    this.backdropPresence.cleanup()
+    this.contentPresence.cleanup()
   }
 
   get isOpen() {

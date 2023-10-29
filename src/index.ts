@@ -12,8 +12,8 @@ export type Presence = ReturnType<typeof createPresence>
 const getAnimationName = (styles?: CSSStyleDeclaration) => styles?.animationName || "none"
 
 export const createPresence = (present: boolean, node: HTMLElement) => {
-  let styles = getComputedStyle(node)
-  let previousPresent = present
+  let styles = {} as CSSStyleDeclaration
+  let previousPresent = false
   let previousAnimationName = "none"
 
   const machine = createMachine(
@@ -21,9 +21,9 @@ export const createPresence = (present: boolean, node: HTMLElement) => {
     {
       open: {
         CLOSE: "closed",
-        ANIMATION_OUT: "animated"
+        ANIMATION_OUT: "animating"
       },
-      animated: {
+      animating: {
         OPEN: "open",
         ANIMATION_END: "closed"
       },
@@ -35,12 +35,10 @@ export const createPresence = (present: boolean, node: HTMLElement) => {
       open: () => {
         node.hidden = false
       },
-      animated: () => {
+      animating: () => {
         node.hidden = false
       },
       closed: () => {
-        // store the styles before hide the element
-        styles = getComputedStyle(node)
         node.hidden = true
         removeEventListeners()
       },
@@ -107,6 +105,12 @@ export const createPresence = (present: boolean, node: HTMLElement) => {
   }
 
   const cleanup = removeEventListeners
+
+  if (present) {
+    open()
+  }
+
+  styles = getComputedStyle(node)
 
   return { open, close, cleanup }
 }
